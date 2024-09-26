@@ -18,7 +18,7 @@ async function getUser(email: string): Promise<User | undefined> {
 
 export const { auth, signIn, signOut } = NextAuth({
 	...authConfig,
-	//secret: env.AUTH_SECRET,
+	secret: process.env.AUTH_SECRET,
 	providers: [
 		Credentials({
 			async authorize(credentials) {
@@ -28,6 +28,7 @@ export const { auth, signIn, signOut } = NextAuth({
 						password: z.string().min(6),
 					})
 					.safeParse(credentials);
+				console.log({ parsedCredentials });
 				if (parsedCredentials.success) {
 					const { email, password } = parsedCredentials.data;
 					const user = await getUser(email);
